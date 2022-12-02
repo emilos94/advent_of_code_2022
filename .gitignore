@@ -14,5 +14,6 @@
 *.sm
 *.plist
 
-# Ignore these repos
+# Ignore these
 .vscode/
+.DS_Store

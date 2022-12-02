@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../util/file_util.h"
+#include <stdbool.h>
 
 void read_calorie_counts(size_t* elfIndex, size_t* calorieCounts);
 void sort(size_t* calorieCounts, size_t numCounts);
@@ -9,6 +9,7 @@ void quickSort(size_t* calorieCounts, size_t low, size_t high);
 size_t partition(size_t* calorieCounts, size_t low, size_t high);
 void swap(size_t* array, size_t i, size_t j);
 
+#define MAX_LINE_LENGTH 1000
 #define VERBOSE 0
 
 int main(void) {
@@ -36,7 +37,6 @@ void read_calorie_counts(size_t* elfIndex, size_t* calorieCounts)
     }
 
     size_t currentNumber = 0;
-    size_t largestNumber = 0;
     
     while(fgets(line, MAX_LINE_LENGTH, textfile))
     {

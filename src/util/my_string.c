@@ -4,41 +4,30 @@ List* str_SplitByChar(MyString* str, char splitChar, MemoryArena* arena)
 {
     List* resultList = list_Init(arena, sizeof(MyString));
 
-    size_t lastSplitIndex = 0;
+    size_t lastStartIndex = 0;
 
     for (size_t i = 0; i < str->Length; i++)
     {
         if (str->Characters[i] == splitChar) 
         {
-            size_t strLength = 0;
-            if (lastSplitIndex == 0)
-            {
-                strLength = i;
-            }
-            else 
-            {
-                strLength = i - lastSplitIndex;
-            }
+            size_t strLength = i - lastStartIndex;
             
-            MyString* s = memory_AllocateStruct(arena, MyString);
-            s->Length = strLength;
-            s->Characters = memory_allocate(arena, sizeof(char) * strLength);
-            memcpy(s->Characters, str->Characters + lastSplitIndex, strLength);
+            MyString* s = str_InitLimit(arena, str->Characters + lastStartIndex, strLength);
             list_Add(arena, resultList, s, sizeof(MyString));
-            lastSplitIndex = i;
+            lastStartIndex = i + 1;
         }
     }
 
-    size_t lengthOfStr = str->Length - lastSplitIndex - 1;
-    MyString* s = memory_AllocateStruct(arena, MyString);
-    s->Length = lengthOfStr;
-    s->Characters = memory_allocate(arena, sizeof(char) * lengthOfStr);
-    memcpy(s->Characters, str->Characters + lastSplitIndex + 1, lengthOfStr);
-    list_Add(arena, resultList, s, sizeof(MyString));
+    bool isLastCharacterSplit = str->Characters[str->Length-1] == splitChar;
+    if (!isLastCharacterSplit) 
+    {
+        size_t strLength = str->Length - lastStartIndex;
+        MyString* s = str_InitLimit(arena, str->Characters + lastStartIndex, strLength);
+        list_Add(arena, resultList, s, sizeof(MyString));
+    }
     
     return resultList;
 }
-
 
 MyString* str_Init(MemoryArena* arena, char* characters)
 {
@@ -47,6 +36,17 @@ MyString* str_Init(MemoryArena* arena, char* characters)
     while ((characters[length++]) != '\0');
 
     str->Length = length-1;
+    str->Characters = memory_AllocateArray(arena, char, length);
+    memcpy(str->Characters, characters, str->Length);
+
+    return str;
+}
+
+MyString* str_InitLimit(MemoryArena* arena, char* characters, size_t length)
+{
+    MyString* str = memory_AllocateStruct(arena, MyString);
+
+    str->Length = length;
     str->Characters = memory_AllocateArray(arena, char, length);
     memcpy(str->Characters, characters, str->Length);
 
@@ -67,6 +67,10 @@ void str_TrimEndWhiteSpace(MyString* str)
         {
             str->Characters[i] = '\0';
             str->Length--;
+        }
+        else 
+        {
+            return;
         }
     }
 }
@@ -102,5 +106,37 @@ bool str_ToInt(MyString* str, int* number)
     }
 
     (*number) = result;
+    return true;
+}
+
+
+bool str_ContainsChar(MyString* str, char c)
+{
+    for (size_t index = 0; index < str->Length; index++) 
+    {
+        if (str->Characters[index] == c) return true;
+    }
+
+    return false;
+}
+
+
+bool str_StartsWith(MyString* str, char* characters, size_t length)
+{
+    if(length > str->Length)
+    {
+        return false;
+    }
+
+    for (size_t index = 0; index < length; index++)
+    {
+        char currentChar = str->Characters[index];
+        char currentTestChar = characters[index];
+        if (currentChar != currentTestChar)
+        {
+            return false;
+        }
+    }
+
     return true;
 }

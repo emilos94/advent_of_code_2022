@@ -17,6 +17,7 @@ typedef struct MemoryArena MemoryArena;
 
 void memory_arena_initialize(MemoryArena* arena, size_t count);
 void memory_arena_free(MemoryArena* arena);
+void memory_arena_reset(MemoryArena* arena);
 void* memory_allocate(MemoryArena* arena, size_t count);
 
 #define memory_AllocateArray(arena, type, count) (type*)memory_allocate(arena, sizeof(type) * count)

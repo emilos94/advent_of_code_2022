@@ -12,6 +12,12 @@ void memory_arena_free(MemoryArena* arena)
     free(arena->Memory);
 }
 
+
+void memory_arena_reset(MemoryArena* arena)
+{
+    arena->Offset = 0;
+}
+
 void* memory_allocate(MemoryArena* arena, size_t count)
 {
     assert (arena->Offset + count <= arena->Capacity);

@@ -22,13 +22,13 @@ void list_Add(MemoryArena* arena, List* list, void* data, size_t sizeOfData)
     }
     else
     {
-        ListNode* currentTail = list->Tail;
+        ListNode* oldTail = list->Tail;
+        listNode->Prev = oldTail;
+        oldTail->Next = listNode;
         list->Tail = listNode;
-        listNode->Prev = currentTail;
-        currentTail->Next = listNode;
     }
 
-    list->Size = list->Size + 1;
+    list->Size++;
 }
 
 void* list_Get(List* list, size_t index)
@@ -37,10 +37,120 @@ void* list_Get(List* list, size_t index)
 
     size_t currentIndex = 0;
     ListNode* currentNode = list->Head;
-    while (currentIndex <= index)
+    while (currentIndex != index)
     {
         currentNode = currentNode->Next;
+        currentIndex++;
     }
 
     return currentNode->Data;
+}
+
+
+ListNode* list_PopBack(List* list)
+{
+    assert(list->Size > 0);
+
+    ListNode* tail = list->Tail;
+    
+    if (list->Size == 1) 
+    {
+        list->Head = NULL;
+        list->Tail = NULL;
+    }
+    else 
+    {
+        ListNode* newTail = tail->Prev;
+        newTail->Next = NULL;
+        list->Tail = newTail;
+    }
+
+    list->Size--;
+
+    tail->Next = NULL;
+    tail->Prev = NULL;
+    return tail;
+}
+
+
+ListNode* list_PopFront(List* list)
+{
+    assert(list->Size > 0);
+
+    ListNode* head = list->Head;
+
+    if (list->Size == 1) 
+    {
+        list->Head = NULL;
+        list->Tail = NULL;
+    }
+    else
+    {
+        ListNode* newHead = head->Next;
+        newHead->Prev = NULL;
+        list->Head = newHead;
+    }
+
+    list->Size--;
+    head->Next = NULL;
+    head->Prev = NULL;
+    return head;
+}
+
+
+ListNode* list_PeekBack(List* list)
+{
+    return list->Tail;
+}
+
+
+ListNode* list_PeekFront(List* list)
+{
+    return list->Head;
+}
+
+void list_PushNodeBack(List* list, ListNode* node)
+{
+    if (list->Size == 0)
+    {
+        list->Head = node;
+        list->Tail = node;
+    }
+    else 
+    {
+        ListNode* currentTail = list->Tail;
+        currentTail->Next = node;
+        node->Prev = currentTail;
+        list->Tail = node;
+    }
+    
+    list->Size++;
+}
+
+void list_PushNodeFront(List* list, ListNode* node)
+{
+    if (list->Size == 0)
+    {
+        list->Head = node;
+        list->Tail = node;
+    }
+    else 
+    {
+        ListNode* currentHead = list->Head;
+        currentHead->Prev = node;
+        node->Next = currentHead;
+        list->Head = node;
+    }
+
+    list->Size++;
+}
+
+ListNode* listNode_Copy(MemoryArena* arena, ListNode* node, size_t sizeOfData)
+{
+    ListNode* copy = memory_AllocateStruct(arena, ListNode);
+    copy->Next = node->Next;
+    copy->Prev = node->Prev;
+    copy->Data = memory_allocate(arena, sizeOfData);
+    memcpy(copy->Data, node->Data, sizeOfData);
+    return copy;
 }

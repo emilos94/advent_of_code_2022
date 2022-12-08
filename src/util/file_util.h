@@ -27,24 +27,26 @@ void file_read_lines(MemoryArena* arena, List* resultList, char* path)
     fclose(textfile);
 }
 
-void file_read_lines_as_mystrings(MemoryArena* arena, List* resultList, char* path)
+List* file_read_lines_as_mystrings_max_line_length(MemoryArena* arena, char* path, size_t lineLength)
 {
     FILE *textfile;
-    char line[MAX_LINE_LENGTH];
+    char line[lineLength];
      
+    List* resultList = list_Init(arena, sizeof(line));
     textfile = fopen(path, "r");
     if(textfile == NULL)
     {
-        return;
+        printf("Failed to read file: %s", path);
+        return resultList;
     }
-    
     size_t lineIndex = 0;
-    while(fgets(line, MAX_LINE_LENGTH, textfile))
+    while(fgets(line, lineLength, textfile))
     {
         MyString* str = str_Init(arena, line);
-        list_Add(arena, resultList, &str, sizeof(MyString));
+        list_Add(arena, resultList, str, sizeof(MyString));
     }
     fclose(textfile);
+    return resultList;
 }
 
 #endif

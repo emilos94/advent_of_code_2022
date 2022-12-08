@@ -140,3 +140,21 @@ bool str_StartsWith(MyString* str, char* characters, size_t length)
 
     return true;
 }
+
+void str_Print(MyString* str)
+{   
+    printf("%.*s", (int)str->Length, str->Characters);
+}
+
+void str_PrintLine(MyString* str)
+{   
+    printf("%.*s\n", (int)str->Length, str->Characters);
+}
+
+
+void str_PrintSubString(MyString* str, size_t start, size_t end)
+{
+    assert(start < str->Length && end < str->Length);
+
+    printf("%.*s", (int)end - start + 1, str->Characters + start);
+}

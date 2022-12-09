@@ -10,6 +10,8 @@ void memory_arena_initialize(MemoryArena* arena, size_t count)
 void memory_arena_free(MemoryArena* arena)
 {
     free(arena->Memory);
+    arena->Capacity = 0;
+    arena->Offset = 0;
 }
 
 

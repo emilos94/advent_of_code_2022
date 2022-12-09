@@ -110,6 +110,32 @@ bool str_ToInt(MyString* str, int* number)
 }
 
 
+bool str_ToSizeT(MyString* str, size_t* number)
+{
+    size_t result = 0;
+    int tensPlace = 1;
+    for (int index = str->Length-1; index >= 0; index--)
+    {
+        char currentChar = str->Characters[index];
+
+        bool isNumber = currentChar >= '0' && currentChar <= '9';
+        if (isNumber)
+        {
+            result += (size_t)((int)currentChar - '0') * tensPlace;
+        }
+        else 
+        {
+            return false;
+        }
+
+        tensPlace *= 10;
+    }
+
+    (*number) = result;
+    return true;
+}
+
+
 bool str_ContainsChar(MyString* str, char c)
 {
     for (size_t index = 0; index < str->Length; index++) 
@@ -157,4 +183,20 @@ void str_PrintSubString(MyString* str, size_t start, size_t end)
     assert(start < str->Length && end < str->Length);
 
     printf("%.*s", (int)end - start + 1, str->Characters + start);
+}
+
+
+bool str_Equals(MyString* either, MyString* other)
+{
+    if (either->Length != other->Length) return false;
+
+    for(size_t charIndex = 0; charIndex < either->Length; charIndex++)
+    {
+        if (either->Characters[charIndex] != other->Characters[charIndex])
+        {
+            return false;
+        }
+    }
+
+    return true;
 }

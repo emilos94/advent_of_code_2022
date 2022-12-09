@@ -154,3 +154,47 @@ ListNode* listNode_Copy(MemoryArena* arena, ListNode* node, size_t sizeOfData)
     memcpy(copy->Data, node->Data, sizeOfData);
     return copy;
 }
+
+
+void* list_AddEmpty(MemoryArena* arena, List* list, size_t size)
+{
+    ListNode* node = memory_AllocateStruct(arena, ListNode);
+
+    if (list->Size == 0) 
+    {
+        list->Head = node;
+        list->Tail = node;
+    }
+    else 
+    {
+        ListNode* currentTail = list->Tail;
+        currentTail->Next = node;
+        node->Prev = currentTail;
+        list->Tail = node;
+    }
+
+    node->Data = memory_allocate(arena, size);
+    list->Size++;
+    return node->Data;
+}
+
+ListNode* list_PushBack(MemoryArena* arena, List* list, void* data)
+{
+    ListNode* node = memory_AllocateStruct(arena, ListNode);
+    node->Data = data;
+    if (list->Size == 0) 
+    {
+        list->Head = node;
+        list->Tail = node;
+    }
+    else 
+    {
+        ListNode* currentTail = list->Tail;
+        currentTail->Next = node;
+        node->Prev = currentTail;
+        list->Tail = node;
+    }
+
+    list->Size++;
+    return node->Data;
+}

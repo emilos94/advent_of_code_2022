@@ -25,6 +25,7 @@ typedef struct List List;
 List* list_Init(MemoryArena* arena, size_t sizePerEntry);
 void list_Add(MemoryArena* arena, List* list, void* data, size_t sizeOfData);
 void* list_Get(List* list, size_t index);
+void* list_AddEmpty(MemoryArena* arena, List* list, size_t size);
 
 ListNode* listNode_Copy(MemoryArena* arena, ListNode* node, size_t sizeOfData);
 
@@ -34,6 +35,7 @@ void list_PushNodeBack(List* list, ListNode* node);
 void list_PushNodeFront(List* list, ListNode* node);
 ListNode* list_PeekBack(List* list);
 ListNode* list_PeekFront(List* list);
+ListNode* list_PushBack(MemoryArena* arena, List* list, void* data);
 
 #define list_AddStruct(arena, list, type) (type*)list_Add(arena, list, sizeof(type))
 #define list_GetStruct(list, index, type) (type*)list_Get(list, index)
@@ -42,8 +44,10 @@ ListNode* list_PeekFront(List* list);
 #define list_Loop(list, type, nodeName, valueName) \
     ListNode* nodeName = NULL;\
     type* valueName = NULL;\
-    for(nodeName = list->Head, valueName = (type*)nodeName->Data;\
+    for(nodeName = list->Size == 0 ? NULL : list->Head, valueName = nodeName == NULL ? NULL : (type*)nodeName->Data;\
         nodeName != NULL;\
         nodeName = nodeName->Next, valueName = nodeName == NULL ? NULL : (type*)nodeName->Data)
+
+#define list_AddEmptyStruct(arena, list, type) (type*)list_AddEmpty(arena, list, sizeof(type))
 
 #endif

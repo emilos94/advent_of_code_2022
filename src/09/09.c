@@ -57,23 +57,17 @@ int main(void)
         {
             size_t knotIndex = 0;
             bool tailMoved = false;
-            //Position oldHeadPos = {};
-
             list_Loop(tenPositionsList, Position, posNode, pos)
             {
                 bool currentPositionIsHead = knotIndex++ == 0;
                 if (currentPositionIsHead) 
                 {
-                    //oldHeadPos.X = pos->X;
-                    //oldHeadPos.Y = pos->Y;
                     ApplyMotionOneStep(&motion, pos);
                 }
                 else 
                 {
-                    //Position oldPos = { .X = pos->X, .Y = pos->Y };
                     Position* head = (Position*)posNode->Prev->Data;
                     tailMoved = ApplyTailFollow(head, pos);
-                    //oldHeadPos = oldPos;
                 }
                 
                 if (tailMoved)

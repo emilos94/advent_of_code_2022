@@ -26,9 +26,10 @@ typedef struct Position Position;
 Motion ParseMotion(MemoryArena* arena, MyString* fileLine);
 MyString* PositionToString(MemoryArena* arena, Position* position);
 void ApplyMotionOneStep(Motion* motion, Position* headPosition);
-bool ApplyTailFollow(Position* oldHeadPos, Position* currentHeadPos, Position* tailPosition);
+bool ApplyTailFollow(Position* currentHeadPos, Position* tailPosition);
 void PrintRopeSim(MemoryArena* arena, HashMap* map);
 List* InitTenPositionsList(MemoryArena* arena);
+int GetMoveDirection(int headPosition, int tailPosition);
 
 int main(void)
 {
@@ -56,23 +57,23 @@ int main(void)
         {
             size_t knotIndex = 0;
             bool tailMoved = false;
-            Position oldHeadPos = {};
+            //Position oldHeadPos = {};
 
             list_Loop(tenPositionsList, Position, posNode, pos)
             {
                 bool currentPositionIsHead = knotIndex++ == 0;
                 if (currentPositionIsHead) 
                 {
-                    oldHeadPos.X = pos->X;
-                    oldHeadPos.Y = pos->Y;
+                    //oldHeadPos.X = pos->X;
+                    //oldHeadPos.Y = pos->Y;
                     ApplyMotionOneStep(&motion, pos);
                 }
                 else 
                 {
-                    Position oldPos = { .X = pos->X, .Y = pos->Y };
+                    //Position oldPos = { .X = pos->X, .Y = pos->Y };
                     Position* head = (Position*)posNode->Prev->Data;
-                    tailMoved = ApplyTailFollow(&oldHeadPos, head, pos);
-                    oldHeadPos = oldPos;
+                    tailMoved = ApplyTailFollow(head, pos);
+                    //oldHeadPos = oldPos;
                 }
                 
                 if (tailMoved)
@@ -152,37 +153,34 @@ void ApplyMotionOneStep(Motion* motion, Position* headPosition)
 }
 
 
-bool ApplyTailFollow(Position* oldHeadPos, Position* currentHeadPos, Position* tailPosition)
+bool ApplyTailFollow(Position* currentHeadPos, Position* tailPosition)
 {
     int xDistance = abs(currentHeadPos->X - tailPosition->X);
     int yDistance = abs(currentHeadPos->Y - tailPosition->Y);
     bool tailMoved = false;
-    int xMove = 0;
-    if (currentHeadPos->X > tailPosition->X)
-        xMove = 1;
-    else if (currentHeadPos->X < tailPosition->X)
-        xMove = -1;
-    
-    int yMove = 0;
-    if (currentHeadPos->Y > tailPosition->Y)
-        yMove = 1;
-    else if (currentHeadPos->Y < tailPosition->Y)
-        yMove = -1;
 
-    if (xDistance > 1) 
+    if (xDistance > 1 || yDistance > 1) 
     {
-        tailPosition->X += xMove;
-        tailPosition->Y += yMove;
-        tailMoved = true;
-    }
-    else if (yDistance > 1)
-    {
+        int xMove = GetMoveDirection(currentHeadPos->X, tailPosition->X);
+        int yMove = GetMoveDirection(currentHeadPos->Y, tailPosition->Y);
+
         tailPosition->X += xMove;
         tailPosition->Y += yMove;
         tailMoved = true;
     }
 
     return tailMoved;
+}
+
+int GetMoveDirection(int headPosition, int tailPosition)
+{
+    int movement = 0;
+    if (headPosition > tailPosition)
+        movement = 1;
+    else if (headPosition < tailPosition)
+        movement = -1;
+
+    return movement;
 }
 
 List* InitTenPositionsList(MemoryArena* arena)

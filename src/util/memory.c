@@ -28,3 +28,12 @@ void* memory_allocate(MemoryArena* arena, size_t count)
     arena->Offset += count;
     return currentPointer;
 }
+
+void* memory_allocate_copy(MemoryArena* arena, void* data, size_t size)
+{
+    assert (arena->Offset + size <= arena->Capacity);
+
+    void* ptr = memory_allocate(arena, size);
+    memcpy(ptr, data, size);
+    return ptr;
+}

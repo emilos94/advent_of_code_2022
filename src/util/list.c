@@ -198,3 +198,17 @@ ListNode* list_PushBack(MemoryArena* arena, List* list, void* data)
     list->Size++;
     return node->Data;
 }
+
+// First predicate param is map entry, second is the param here used for filtering
+void* list_FindByPredicate(List* list, bool (*predicate)(void*, void*), void* param)
+{
+    list_Loop(list, void, node, val)
+    {
+        if ((*predicate)(val, param))
+        {
+            return val;
+        }
+    }
+
+    return NULL;
+}

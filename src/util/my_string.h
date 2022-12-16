@@ -30,4 +30,6 @@ bool str_ToSizeT(MyString* str, size_t* number);
 bool str_ContainsChar(MyString* str, char c);
 bool str_StartsWith(MyString* str, char* c, size_t length);
 
+MyString* str_IntToString(MemoryArena* arena, int num);
+MyString* str_Concat(MemoryArena* arena, MyString* first, MyString* second);
 #endif

@@ -4,6 +4,7 @@
 #include "memory.h"
 #include <string.h> // memcpy
 #include <assert.h>
+#include <stdbool.h>
 
 typedef struct ListNode ListNode;
 struct ListNode
@@ -36,6 +37,8 @@ void list_PushNodeFront(List* list, ListNode* node);
 ListNode* list_PeekBack(List* list);
 ListNode* list_PeekFront(List* list);
 ListNode* list_PushBack(MemoryArena* arena, List* list, void* data);
+
+void* list_FindByPredicate(List* list, bool (*predicate)(void*, void*), void* param);
 
 #define list_AddStruct(arena, list, type) (type*)list_Add(arena, list, sizeof(type))
 #define list_GetStruct(list, index, type) (type*)list_Get(list, index)

@@ -182,7 +182,7 @@ void str_PrintSubString(MyString* str, size_t start, size_t end)
 {
     assert(start < str->Length && end < str->Length);
 
-    printf("%.*s", (int)end - start + 1, str->Characters + start);
+    printf("%.*s", (int)end - (int)start + 1, str->Characters + start);
 }
 
 
@@ -199,4 +199,31 @@ bool str_Equals(MyString* either, MyString* other)
     }
 
     return true;
+}
+
+MyString* str_IntToString(MemoryArena* arena, int num)
+{
+    int length = snprintf( NULL, 0, "%d", num);
+    char* characters = memory_AllocateArray(arena, char, length + 1);
+    snprintf(characters, length + 1, "%d", num);
+    MyString* str = str_InitLimit(arena, characters, length);
+    return str;
+}
+
+MyString* str_Concat(MemoryArena* arena, MyString* first, MyString* second)
+{
+    size_t concattedLength = first->Length + second->Length;
+    char* concattedChars = memory_AllocateArray(arena, char, concattedLength);
+    size_t concattedCharsIndex = 0;
+    for (size_t index = 0; index < first->Length; index++)
+    {
+        concattedChars[concattedCharsIndex++] = first->Characters[index];
+    }
+    for (size_t index = 0; index < second->Length; index++)
+    {
+        concattedChars[concattedCharsIndex++] = second->Characters[index];
+    }
+    
+    MyString* concattedStr = str_InitLimit(arena, concattedChars, concattedLength);
+    return concattedStr;
 }

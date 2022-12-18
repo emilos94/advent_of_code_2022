@@ -18,10 +18,12 @@ typedef struct MyString MyString;
 
 MyString* str_Init(MemoryArena* arena, char* characters);
 MyString* str_InitLimit(MemoryArena* arena, char* characters, size_t length);
+MyString* str_InitWithChar(MemoryArena* arena, char character, size_t length);
 void str_Print(MyString* str);
 void str_PrintLine(MyString* str);
 void str_PrintSubString(MyString* str, size_t start, size_t end);
 bool str_Equals(MyString* either, MyString* other);
+bool str_EqualsChars(MyString* either, char* other);
 
 List* str_SplitByChar(MyString* str, char splitChar, MemoryArena* arena);
 void str_TrimEndWhiteSpace(MyString* str);

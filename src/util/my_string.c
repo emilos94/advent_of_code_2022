@@ -53,6 +53,19 @@ MyString* str_InitLimit(MemoryArena* arena, char* characters, size_t length)
     return str;
 }
 
+MyString* str_InitWithChar(MemoryArena* arena, char character, size_t length)
+{
+    MyString* str = memory_AllocateStruct(arena, MyString);
+    str->Length = length;
+    str->Characters = memory_AllocateArray(arena, char, length);
+
+    for (size_t i = 0; i < length; i++) 
+    {
+        str->Characters[i] = character;
+    }
+
+    return str;
+}
 
 void str_TrimEndWhiteSpace(MyString* str)
 {
@@ -193,6 +206,20 @@ bool str_Equals(MyString* either, MyString* other)
     for(size_t charIndex = 0; charIndex < either->Length; charIndex++)
     {
         if (either->Characters[charIndex] != other->Characters[charIndex])
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+bool str_EqualsChars(MyString* either, char* other) 
+{
+    for(size_t charIndex = 0; charIndex < either->Length; charIndex++)
+    {
+        if (either->Characters[charIndex] != other[charIndex])
         {
             return false;
         }

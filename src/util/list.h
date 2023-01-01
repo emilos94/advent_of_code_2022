@@ -24,6 +24,7 @@ struct List
 typedef struct List List;
 
 List* list_Init(MemoryArena* arena, size_t sizePerEntry);
+List* list_Copy(MemoryArena* arena, List* toCopy);
 void list_Add(MemoryArena* arena, List* list, void* data, size_t sizeOfData);
 void* list_Get(List* list, size_t index);
 void* list_AddEmpty(MemoryArena* arena, List* list, size_t size);
@@ -44,6 +45,8 @@ void* list_FindByPredicate(List* list, bool (*predicate)(void*, void*), void* pa
 #define list_GetStruct(list, index, type) (type*)list_Get(list, index)
 #define list_PeekBackValue(list, type) (type*)list_PeekBack(list)->Data
 #define list_PeekFrontValue(list, type) (type*)list_PeekFront(list)->Data
+#define list_PopBackValue(list, type) (type*)list_PopBack(list)->Data
+#define list_PopFrontValue(list, type) (type*)list_PopFront(list)->Data
 #define list_Loop(list, type, nodeName, valueName) \
     ListNode* nodeName = NULL;\
     type* valueName = NULL;\

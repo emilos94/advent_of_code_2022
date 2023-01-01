@@ -1,11 +1,6 @@
-#include "../util/my_string.h"
-#include "../util/memory.h"
-#include <assert.h>
+#include "my_string_tests.h"
 
-void test_SplitByChar_EndsWithSplit(MemoryArena* arena);
-void test_SplitByChar(MemoryArena* arena);
-
-int main(void) 
+int my_string_tests_run(void) 
 {
     MemoryArena arena;
     memory_arena_initialize(&arena, Kilobytes(1000));
@@ -15,9 +10,6 @@ int main(void)
 
     test_SplitByChar(&arena);
     memory_arena_reset(&arena);
-
-    
-
 }
 
 

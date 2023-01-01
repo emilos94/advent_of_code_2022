@@ -34,7 +34,7 @@ void list_Add(MemoryArena* arena, List* list, void* data, size_t sizeOfData)
 void* list_Get(List* list, size_t index)
 {
     assert(index <= list->Size-1);
-
+    
     size_t currentIndex = 0;
     ListNode* currentNode = list->Head;
     while (currentIndex != index)
@@ -211,4 +211,16 @@ void* list_FindByPredicate(List* list, bool (*predicate)(void*, void*), void* pa
     }
 
     return NULL;
+}
+
+List* list_Copy(MemoryArena* arena, List* toCopy)
+{
+    List* copy = list_Init(arena, toCopy->SizePerEntry);
+    
+    list_Loop(toCopy, void, node, value)
+    {
+        list_Add(arena, copy, value, toCopy->SizePerEntry);
+    }
+
+    return copy;
 }

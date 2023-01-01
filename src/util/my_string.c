@@ -88,6 +88,47 @@ void str_TrimEndWhiteSpace(MyString* str)
     }
 }
 
+
+void str_TrimStartAndEndWhiteSpace(MyString* str)
+{
+    for (int i = str->Length-1; i >= 0; i--)
+    {
+        bool IsWhiteSpace = 
+            str->Characters[i] == ' ' ||
+            str->Characters[i] == '\n' ||
+            str->Characters[i] == '\t';
+
+        if (IsWhiteSpace) 
+        {
+            str->Characters[i] = '\0';
+            str->Length--;
+        }
+        else 
+        {
+            break;
+        }
+    }
+    int beginLength = str->Length;
+    for (int i = 0; i < str->Length;)
+    {
+        bool IsWhiteSpace = 
+            str->Characters[i] == ' ' ||
+            str->Characters[i] == '\n' ||
+            str->Characters[i] == '\t';
+
+        if (IsWhiteSpace) 
+        {
+            str->Characters = str->Characters + sizeof(char);
+            str->Length--;
+        }
+        else 
+        {
+            return;
+        }
+    }
+
+}
+
 bool str_ToInt(MyString* str, int* number)
 {
     int result = 0;
@@ -254,3 +295,19 @@ MyString* str_Concat(MemoryArena* arena, MyString* first, MyString* second)
     MyString* concattedStr = str_InitLimit(arena, concattedChars, concattedLength);
     return concattedStr;
 }
+
+
+MyString* str_Substring(MemoryArena* arena, MyString* str, size_t start, size_t end)
+{
+    assert(
+        arena && 
+        str && 
+        start <= str->Length && 
+        end <= str->Length && 
+        start <= end
+    );
+    MyString* subStr = str_InitLimit(arena, str->Characters + start * sizeof(char), end - start + 1);
+
+    return subStr;
+}
+

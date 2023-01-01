@@ -27,6 +27,7 @@ bool str_EqualsChars(MyString* either, char* other);
 
 List* str_SplitByChar(MyString* str, char splitChar, MemoryArena* arena);
 void str_TrimEndWhiteSpace(MyString* str);
+void str_TrimStartAndEndWhiteSpace(MyString* str);
 bool str_ToInt(MyString* str, int* number);
 bool str_ToSizeT(MyString* str, size_t* number);
 bool str_ContainsChar(MyString* str, char c);
@@ -34,4 +35,5 @@ bool str_StartsWith(MyString* str, char* c, size_t length);
 
 MyString* str_IntToString(MemoryArena* arena, int num);
 MyString* str_Concat(MemoryArena* arena, MyString* first, MyString* second);
+MyString* str_Substring(MemoryArena* arena, MyString* str, size_t start, size_t end);
 #endif

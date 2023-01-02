@@ -68,6 +68,35 @@ void arrlist_Sort(ArrayList* list, bool (*comparisonFunc)(void*, void*))
     _arrlist_quickSort(list, 0, list->Count-1, comparisonFunc);
 }
 
+bool arrlist_Contains(ArrayList* list, void* data)
+{
+    char* dataChar = (char*) data;
+    for (size_t index = 0; index < list->Count; index++)
+    {
+        if (index == list->Count) 
+        {
+            int x = 0;
+        }
+        char* currentData = (char*) arrlist_Get(list, index);
+        bool isSame = true;
+        for (size_t byteIndex = 0; byteIndex < list->SizePerElement; byteIndex++)
+        {
+            if (dataChar[byteIndex] != currentData[byteIndex])
+            {
+                isSame = false;
+                break;
+            }
+        }
+
+        if (isSame)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void _arrlist_Resize(MemoryArena* arena, ArrayList* list)
 {
     size_t newCapacity = list->Capacity + list->Capacity / 2;

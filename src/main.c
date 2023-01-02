@@ -1,15 +1,16 @@
 #include "util/file_util.h"
 #include "util/memory.h"
 
-#include "11.h"
+#include "12.h"
 
 
 int main(void) 
 {
     MemoryArena arena;
-    memory_arena_initialize(&arena, Megabytes(10));
+    memory_arena_initialize(&arena, Megabytes(5));
 
-    List* fileLines = file_read_lines_as_mystrings_max_line_length(&arena, "../data/11-test.txt", 50);
+    List* fileLines = file_read_lines_as_mystrings_max_line_length(&arena, "../data/12.txt", 100);
 
-    return eleven_solve(&arena, fileLines);
+    TwelveSolve(&arena, fileLines);
+    return 1;
 }

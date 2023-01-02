@@ -19,9 +19,13 @@ ArrayList* arrlist_New(MemoryArena* arena, size_t capacity, size_t sizeOfElement
 ArrayList* arrlist_Copy(MemoryArena* arena, ArrayList* toCopy);
 
 void* arrlist_Get(ArrayList* list, size_t index);
+// Warning: using the set will make count property incorrect
+void arrlist_Set(ArrayList* list, size_t index, void* data);
+
 void arrlist_Add(MemoryArena* arena, ArrayList* list, void* item);
 void arrlist_Remove(ArrayList* list, size_t index);
 void arrlist_Sort(ArrayList* list, bool (*comparisonFunc)(void*, void*));
+bool arrlist_Contains(ArrayList* list, void* data);
 
 void _arrlist_Resize(MemoryArena* arena, ArrayList* list);
 
@@ -30,11 +34,11 @@ int _arrlist_partition(ArrayList* list, int low, int high, bool (*comparisonFunc
 void _arrlist_swap(ArrayList* list, int i, int j);
 
 #define arrlist_GetType(arraylist, type, index) (type*)arrlist_Get(arraylist, index)
-#define arrlist_Foreach(arraylist, type, varname) \
-    size_t index = 0; \
-    type* varname = NULL; \
-    for(index = 0, varname = arraylist->Count > 0 ? arrlist_GetType(arraylist, type, 0) : NULL; \
-        index < arraylist->Count; \ 
-        index++, varname = arrlist_GetType(arraylist, type, index)) \
+#define arrlist_Foreach(arraylist, type, varname)\
+    size_t index = 0;\
+    type* varname = NULL;\
+    for(index = 0, varname = arraylist->Count > 0 ? arrlist_GetType(arraylist, type, 0) : NULL;\
+        index < arraylist->Count;\ 
+        index++, varname = index == arraylist->Capacity ? NULL : arrlist_GetType(arraylist, type, index))\
 
 #endif

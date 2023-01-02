@@ -26,4 +26,9 @@ void* memory_allocate_copy(MemoryArena* arena, void* data, size_t size);
 #define memory_AllocateStruct(arena, type) (type*)memory_allocate(arena, sizeof(type))
 #define memory_AllocateCopy(arena, type, data) (type*)memory_allocate_copy(arena, data, sizeof(type))
 
+#define memory_ArenaBlock(name, size) \
+    MemoryArena name; \
+    memory_arena_initialize(&name, size); \
+    for (size_t index = 0; index < 1; index++, memory_arena_free(&name)) \
+
 #endif

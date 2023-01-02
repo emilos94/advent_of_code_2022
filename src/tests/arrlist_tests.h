@@ -10,5 +10,6 @@ int arrlist_tests_run(void);
 
 void _test_arrlist(void);
 void _test_arrlist_swap(void);
+void _test_arrlist_contains(void);
 
 #endif

@@ -6,6 +6,7 @@ int arrlist_tests_run(void)
 {
     _test_arrlist();
     _test_arrlist_swap();
+    _test_arrlist_contains();
 }
 
 void _test_arrlist(void)
@@ -67,6 +68,23 @@ void _test_arrlist_swap(void)
     assert(db == a);
 
     memory_arena_free(&arena);
+}
+
+void _test_arrlist_contains(void)
+{
+    memory_ArenaBlock(arena, Kilobytes(1))
+    {
+        ArrayList* arrlist = arrlist_New(&arena, 2, sizeof(int));
+        int a = 10;
+        int b = 100;
+        arrlist_Add(&arena, arrlist, &a);
+        arrlist_Add(&arena, arrlist, &b);
+
+        int c = 10;
+        int d = 20;
+        assert(arrlist_Contains(arrlist, &c));
+        assert(!arrlist_Contains(arrlist, &d));
+    }
 }
 
 bool compareInts(void* either, void* other)
